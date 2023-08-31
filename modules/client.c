@@ -58,7 +58,7 @@ error_code clientApp(void)
     }
     close(clientDescriptor);
 
-    return 0;
+    return no_error;
 }
 
 
