@@ -45,5 +45,7 @@ typedef struct
 
 void getAppParam(int argc, char **argv, CURRENT_TYPE_APP_t* currentTypeApp);
 void receive_message(char* encodedMassage);
+void getDecodeMsg(char* input);
+
 
 #endif //CLIENT_UTILS_H

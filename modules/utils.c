@@ -63,10 +63,28 @@ void receive_message(char* encodedMassage)
     printf("Enter a message: ");
     fgets(message, sizeof(message), stdin);
     //printf("Received message: %s\n", message);
-
+    //strcat(message, "\0");
     encodeToMorse(message, encodedMassage);
     printf("Результат шифрования: %s\n", encodedMassage);
 
+}
+
+void getDecodeMsg(char* input)
+{
+    const char charDelimiter[] = "|";
+    const char worldDelimiter[] = " ";
+
+    char findCharacter;
+    char* token = strtok((char*)input, charDelimiter); // Разбиваем строку на символы морзе по разделителю
+    printf("\nFind character \n");
+    while (token != NULL)
+    {
+        decryptChar(token, &findCharacter);
+        token = strtok(NULL, charDelimiter); // Получаем следующий символ морзе
+        printf("%c", findCharacter);
+    }
+
+    printf("\n"); // Переходим на новую строку после дешифрования
 }
 
 

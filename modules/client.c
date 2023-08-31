@@ -4,7 +4,6 @@
 
 #include "client.h"
 
-
 int clientDescriptor;
 struct sockaddr_in adr = {0};
 
@@ -36,12 +35,14 @@ error_code clientApp(void)
         perror("connect failed");
         return client_error;
     }
-    while(1)
-    {
+
+    while(1) {
         write(clientDescriptor, "hello from client\n", 18);
         char buf[256];
         ssize_t nread;
+
         nread = read(clientDescriptor, buf, 256);
+
         if (nread == -1) {
             perror("read failed");
             return client_error;
@@ -50,9 +51,13 @@ error_code clientApp(void)
             printf("EOF occurred\n");
         }
         write(STDOUT_FILENO, buf, nread);
+
+        getDecodeMsg(buf);
+        printf("\n");
         //sleep(10);
     }
-    //close(clientDescriptor);
+    close(clientDescriptor);
+
     return 0;
 }
 

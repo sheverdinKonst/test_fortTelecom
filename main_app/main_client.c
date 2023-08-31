@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv) {
 
-    printf("Hello, client app with sending message in Morse code!\n");
+    printf("Hello, client app with decoding message from Morse code!\n");
     CURRENT_TYPE_APP_t currentTypeApp =
     {
         .appType = SERVER,

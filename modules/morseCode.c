@@ -4,51 +4,89 @@
 
 #include "morseCode.h"
 
+#define MORSE_TABLE_SIZE (36)
+#define MORSE_WORD_LENGHT (6)
+
+const char morseTable[MORSE_TABLE_SIZE][MORSE_WORD_LENGHT] =
+{
+    {".-"},   {"-..."}, {"-.-."}, {"-.."},  {"."},    {"..-."},  // A-F
+    {"--."},  {"...."}, {".."},   {".---"}, {"-.-"},  {".-.."},  // G-L
+    {"--"},   {"-."},   {"---"},  {".--."}, {"--.-"}, {".-."},   // M-R
+    {"..."},  {"-"},    {"..-"},  {"...-"}, {".--"},  {"-..-"},  // S-X
+    {"-.--"}, {"--.."}, {"-----"},{".----"},{"..---"},{"...--"}, // Y-3
+    {"....-"},{"....."},{"-...."},{"--..."},{"---.."},{"----."}  // 4-9
+};
+
+void decryptChar(const char* morseChar, char* decryptChar)
+{
+    //*decryptChar = '?'; // character not found
+    *decryptChar = *morseChar;
+    for (int i = 0; i < MORSE_TABLE_SIZE; i++)
+    {
+        if (strcmp(morseChar, morseTable[i]) == 0)
+        {
+            if (i <= 26)
+            {
+                *decryptChar = (char)('A' + i);
+                //return 'A' + i; // Возвращаем соответствующую латинскую букву
+            }
+            else
+            {
+                *decryptChar = (char)(i + DIGIT_OFFSET);
+                //return '0' + i; // Возвращаем соответствующую цифру
+            }
+            i = MORSE_TABLE_SIZE;
+        }
+    }
+}
+
 void encodeToMorse(char* input, char* output) {
-    int i;
-    char morse[36][6] = {
-            {".-"},   {"-..."}, {"-.-."}, {"-.."},  {"."},    {"..-."},  // A-F
-            {"--."},  {"...."}, {".."},   {".---"}, {"-.-"},  {".-.."},  // G-L
-            {"--"},   {"-."},   {"---"},  {".--."}, {"--.-"}, {".-."},   // M-R
-            {"..."},  {"-"},    {"..-"},  {"...-"}, {".--"},  {"-..-"},  // S-X
-            {"-.--"}, {"--.."}, {"-----"},{".----"},{"..---"},{"...--"}, // Y-3
-            {"....-"},{"....."},{"-...."},{"--..."},{"---.."},{"----."}  // 4-9
-    };
 
     printf("num of symbols = %lu\n", strlen(input));
 
-    for (i = 0; i < strlen(input); i++) {
+    for (int i = 0; i < strlen(input); i++)
+    {
         printf("input[i] = %d\n", input[i]);
-
 
         if (input[i] >= 'A' && input[i] <= 'Z')
         {
-            strcpy(output, morse[input[i] - 'A']);
+            strcat(output, "|");
+            strcpy(output, morseTable[input[i] - 'A']);
             strcat(output, "|");
         }
         else if (input[i] >= 'a' && input[i] <= 'z')
         {
-            strcpy(output, morse[input[i] - 'a']);
             strcat(output, "|");
-            printf("morse[input[i]] = %s\n", morse[input[i] -'a']);
+            strcpy(output, morseTable[input[i] - 'a']);
+            strcat(output, "|");
+            printf("morseTable[input[i]] = %s\n", morseTable[input[i] - 'a']);
         }
         else if (input[i] >= '0' && input[i] <= '9')
         {
-            strcpy(output, morse[input[i] - 22]);
             strcat(output, "|");
-            printf("morse[input[i]] = %s\n", morse[input[i] - 22]);
+            strcpy(output, morseTable[input[i] - DIGIT_OFFSET]);
+            strcat(output, "|");
+            printf("morseTable[input[i]] = %s\n", morseTable[input[i] - DIGIT_OFFSET]);
         }
-        else if (input[i] >= ' ')
+        else if (input[i] == 32)
         {
             printf("PROBEL\n");
-            output[0] = ' ';
-            strcat(output, " ");
+            //output[0] = ' ';
+            strcat(output, "  |");
+        }
+        else if (input[i] == 10)
+        {
+            output[0] = '\0';
+            strcat(output,  " ");
         }
         else
         {
-            output[0] = '\0';
-            strcat(output, " ");
+            //output[0] = '\0';
+           strcpy(output, "?|");
+           //strcat(output, "?");
         }
         output += strlen(output);
     }
 }
+
+
